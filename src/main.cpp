@@ -69,25 +69,35 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void matchLoading(){
 
     chassis.moveToPose(36,-10,-90,1000, {.forwards=false});
-    chassis.moveToPoint(50,-10,500, {.forwards=false});
+    chassis.moveToPoint(40,-10,500, {.forwards=false});
     chassis.waitUntilDone();
-    chassis.moveToPose(15, -10, 23, 3000, {.forwards=false});
+    chassis.moveToPose(15, -10, 22, 3000, {.forwards=false});
     chassis.waitUntilDone();
-    //leftMotors.move_velocity(-5);
+    // leftMotors.move_velocity(-3);
+    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
     wings.set_state(1);
-    slapperMotor.move_velocity(50);
-    pros::delay(30 *1000);
+    slapperMotor.move_velocity(59);
+    pros::delay(28 *1000);
     slapperMotor.move_velocity(0);
-    leftMotors.move_velocity(0);
+    wings.set_state(0);
+    chassis.setBrakeMode(MOTOR_BRAKE_COAST);
 }
 
 void skillsRun(){
-matchLoading();
-chassis.moveToPose(25,45,0,1000);
-intake.move_velocity(200);
-chassis.waitUntilDone();
-chassis.turnTo(114, 45, 90, 1000);
-intake.move_velocity(-200);
+    matchLoading();
+    pros::delay(280);
+    //through alley
+    chassis.moveToPose(-3,42,0,5000);
+    chassis.moveToPoint(-3,80,5000);
+    chassis.waitUntil(18);
+    slapperMotor.move_velocity(30);
+    chassis.waitUntilDone();
+    slapperMotor.move_velocity(0);
+    //corner curve
+    chassis.moveToPose(25,115,90,5000);
+    //second push
+    chassis.moveToPoint(15,110,1000, {.forwards=false});
+    chassis.moveToPoint(30,110,1000);
 }
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
