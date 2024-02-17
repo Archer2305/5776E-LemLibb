@@ -259,6 +259,7 @@ class Chassis {
         void setBrakeMode(pros::motor_brake_mode_e mode);
 
         void turnTo(float x, float y, int timeout, bool forwards = true, float maxSpeed = 127, bool async = true);
+        void turnToAngle(float theta, int timeout, bool forwards = true, float maxSpeed = 127, bool async = true);
         /**
          * @brief Move the chassis towards the target pose
          *

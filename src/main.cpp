@@ -67,25 +67,18 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 void matchLoading(int time){
-    chassis.turnTo(50, 50, 800);
-    chassis.waitUntilDone();
     wings.set_state(1);
-    pros::delay(320);
+    pros::delay(300);
     wings.set_state(0);
 
-    chassis.moveToPoint(6, -8, 1000, {.forwards=false, .maxSpeed=100});
+    chassis.moveToPose(0, -13, 22, 2000, {.forwards=false, .maxSpeed=100});
     pros::delay(100);
-    chassis.turnTo(36, 80, 1000);
+    // chassis.turnTo(48, 88, 1000);
     chassis.waitUntilDone();
     pros::delay(100);
-    chassis.tank(-32, -32);
-    pros::delay(280);
-    chassis.tank(0, 0);
-    
-    pros::delay(800);
     chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
     wings.set_state(1);
-    slapperMotor.move_velocity(42);
+    slapperMotor.move_velocity(55);
     pros::delay(time *1000);
     slapperMotor.move_velocity(0);
     wings.set_state(0);
@@ -93,33 +86,57 @@ void matchLoading(int time){
 }
 
 void skillsRun(){
-    matchLoading(32);
+    matchLoading(1);
     pros::delay(280);
     chassis.moveToPoint(23, -20, 1000, {.forwards=false});
     chassis.moveToPoint(-6, 6, 1000);
     slapperMotor.move_velocity(16);
     pros::delay(280);
     slapperMotor.move_velocity(0);
-    slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    // slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
     //through alley
-    chassis.moveToPose(-5,36,0,5000, {.minSpeed=88});
+    chassis.moveToPose(-5,36,0,5000, {.minSpeed=80});
     chassis.moveToPoint(-5,80,5000);
     chassis.waitUntilDone();
+    slapperMotor.move_velocity(30);
     slapperMotor.move_velocity(0);
+    chassis.turnTo(0, 0, 1000);
     //corner curve
-    chassis.moveToPose(16,111,90,4000);
+    chassis.moveToPose(16,108,-90,2000, {.forwards=false});
     chassis.waitUntilDone();
-    chassis.turnTo(-16, 108, 1000);
-    chassis.waitUntilDone();
+    // chassis.turnTo(-16, 108, 1000);
+    // chassis.waitUntilDone();
+    chassis.tank(50, 50);
+    pros::delay(320);
     chassis.tank(-110, -110);
     pros::delay(320);
     chassis.tank(0, 0);
-        //second push
-    chassis.moveToPoint(8, 108, 1000);
+  
+    wings.set_state(0);
+    chassis.moveToPose(51, 38, 128,1000);
+    chassis.moveToPose(64, 38, 90,1000);
+    chassis.turnTo(-8, 0, 1000);
+    chassis.waitUntilDone();
+    wings.set_state(1);
     chassis.tank(-110, -110);
-    pros::delay(320);
+    pros::delay(1000);
     chassis.tank(0, 0);
+    wings.set_state(0);
+    chassis.moveToPose(64, 64, 30, 1000, {.forwards=false});
+    chassis.turnTo(0, 85, 2000);
+    wings.set_state(1);
+    chassis.tank(-110, -110);
+    pros::delay(800);
+    wings.set_state(0);
+    chassis.tank(0, 0);
+
+    printf("x: %lf, y: %lf", chassis.getPose().x, chassis.getPose().y);
+
+    chassis.moveToPose(72, 36, 100, 1000,{.forwards=false});
+    wings.set_state(1);
+    chassis.waitUntilDone();
+    wings.set_state(0);
     //chassis.moveToPoint(15,110,1000, {.forwards=false});
     //chassis.moveToPoint(30,110,1000);
 }
@@ -236,14 +253,15 @@ void six_ball() {
     intake.move_velocity(0);
 
     chassis.moveToPoint(0, -30, 2000, {.forwards = false, .maxSpeed=88});
-    chassis.moveToPose(42, -59, -84, 500, {.forwards = false, .maxSpeed=127}, true); //|
+    chassis.moveToPose(42, -59, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
     //chassis.waitUntil(8);                                                             //|
     wings.set_state(1);
     //chassis.waitUntil(16);
-    pros::delay(640);
+    pros::delay(580);
     wings.set_state(0);
     chassis.waitUntilDone();
+    pros::delay(80);
 
     chassis.moveToPoint(37, -55, 2000, {.forwards=false});
     chassis.tank(64, 64);
@@ -265,26 +283,23 @@ void six_ball() {
     chassis.waitUntilDone();
     pros::delay(800);
     intake.move_velocity(0);
-    chassis.moveToPoint(57, -38, 1000);
-    pros::delay(160);
+    chassis.moveToPoint(63, -53, 1000);
+    pros::delay(320);
     intake.move_velocity(-600);
     chassis.waitUntilDone();
     chassis.tank(-80, -80);
     pros::delay(100);
     chassis.tank(0, 0);
     intake.move_velocity(0);
-//backup
-    chassis.tank(-64, -64);
-    pros::delay(280);
-    chassis.tank(0, 0);
+
 }
 
 void autonomous() {
-    skillsRun();
+    six_ball();
 }
 
 void opcontrol() {
-    //matchLoading(32);
+    //matchLoading(25);
     while (true) {
         update_intake();
         update_slapper();
