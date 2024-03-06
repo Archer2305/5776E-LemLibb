@@ -23,25 +23,25 @@ lemlib::Drivetrain drivetrain(&leftMotors,                  // left motor group
                               11,                           // 11 inch track width
                               lemlib::Omniwheel::NEW_325,   // using new 3.25" omnis
                               450,                          // drivetrain rpm is 450
-                              4                             // chase power is 2.
+                              6                                  
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(6,      // proportional gain (kP)
+lemlib::ControllerSettings linearController(8,      // proportional gain (kP)
                                             0,      // integral gain (kI)
-                                            1,      // derivative gain (kD)
+                                            0,      // derivative gain (kD)
                                             3,      // anti windup
                                             1,      // small error range, in inches
                                             100,    // small error range timeout, in milliseconds
                                             4,      // large error range, in inches
                                             500,    // large error range timeout, in milliseconds
-                                            0      // maximum acceleration (slew)
+                                            6     // maximum acceleration (slew)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2,     // proportional gain (kP)
+lemlib::ControllerSettings angularController(2,     // proportional gain (8kP)
                                              0,     // integral gain (kI)
-                                             11,    // derivative gain (kD)
+                                             16,    // derivative gain (kD)
                                              3,     // anti windup
                                              1,     // small error range, in degrees
                                              100,   // small error range timeout, in milliseconds
@@ -66,17 +66,17 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 void matchLoading(float time){
-    wings.set_state(1);
-    pros::delay(320);
-    wings.set_state(0);
+    //rightWing.set_state(1);
+    //pros::delay(320);
+    //rightWing.set_state(0);
 
-    chassis.moveToPoint(6, -8, 1000, {.forwards=false, .maxSpeed=100});
+    chassis.moveToPoint(10, -15, 1000, {.forwards=false, .maxSpeed=100});
     pros::delay(100);
-    chassis.turnTo(36, 80, 1000);
+    chassis.turnTo(42, 72, 1000);       //15 deg
     chassis.waitUntilDone();
     pros::delay(100);
-    chassis.tank(-32, -32);
-    pros::delay(280);
+    chassis.tank(-36, -36);
+    pros::delay(165);
     chassis.tank(0, 0);
     
     pros::delay(800);
@@ -90,7 +90,7 @@ void matchLoading(float time){
 }
 
 void skillsRun() {
-    matchLoading(23);
+    matchLoading(1);
     pros::delay(280);
     chassis.moveToPoint(23, -20, 1000, {.forwards=false});
     chassis.moveToPoint(-6, 6, 1000);
@@ -100,8 +100,8 @@ void skillsRun() {
     slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
     //through alley
-    chassis.moveToPose(-5,36,0,5000, {.minSpeed=88});
-    chassis.moveToPoint(-5,80,5000);
+    chassis.moveToPose(-6,36,0,5000, {.minSpeed=88});       //-5
+    chassis.moveToPoint(-6,80,5000);
     chassis.waitUntilDone();
     slapperMotor.move_velocity(30);
     chassis.turnTo(0, 0, 1000);
@@ -148,6 +148,30 @@ void skillsRun() {
     //chassis.moveToPoint(15,110,1000, {.forwards=false});
     //chassis.moveToPoint(30,110,1000);
 }
+
+
+void new_skills() {
+    matchLoading(0);
+
+    pros::delay(280);
+    chassis.moveToPoint(23, -23, 1000, {.forwards=false});  //push preloads in
+
+    //along middle barrier
+    chassis.moveToPoint(12, -23, 1000);
+    chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
+    chassis.waitUntilDone();
+    chassis.moveToPoint(100, 23, 3000, {.forwards=false});
+    wings.set_state(1);
+        //drop slapper
+    chassis.waitUntilDone();
+
+    //around short barrier
+    chassis.moveToPose(); //around, using front, run slapper  
+
+
+}
+
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
@@ -331,8 +355,12 @@ void six_ball() {
 #endif
 }
 
+void tuning() {
+    chassis.turnTo(24, 0, 2000);
+}
+
 void autonomous() {
-    elims();
+    new_skills();
 }
 
 void opcontrol() {
@@ -360,6 +388,7 @@ void opcontrol() {
         #endif  
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        
         // move the chassis with curvature drive
         chassis.curvature(abs(leftY) > 16 ? leftY : 0, abs(rightX) > 16 ? rightX : 0);
         // delay to save resources
