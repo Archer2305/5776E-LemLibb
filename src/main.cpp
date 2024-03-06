@@ -67,14 +67,19 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 void matchLoading(float time){
     wings.set_state(1);
-    pros::delay(300);
+    pros::delay(320);
     wings.set_state(0);
 
-    chassis.moveToPose(0, -13, 22, 2000, {.forwards=false, .maxSpeed=100});
+    chassis.moveToPoint(6, -8, 1000, {.forwards=false, .maxSpeed=100});
     pros::delay(100);
-    // chassis.turnTo(48, 88, 1000);
+    chassis.turnTo(36, 80, 1000);
     chassis.waitUntilDone();
     pros::delay(100);
+    chassis.tank(-32, -32);
+    pros::delay(280);
+    chassis.tank(0, 0);
+    
+    pros::delay(800);
     chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
     wings.set_state(1);
     slapperMotor.move_velocity(60);
@@ -92,10 +97,10 @@ void skillsRun() {
     slapperMotor.move_velocity(23);
     pros::delay(280);
     slapperMotor.move_velocity(0);
-    // slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
     //through alley
-    chassis.moveToPose(-5,36,0,5000, {.minSpeed=80});
+    chassis.moveToPose(-5,36,0,5000, {.minSpeed=88});
     chassis.moveToPoint(-5,80,5000);
     chassis.waitUntilDone();
     slapperMotor.move_velocity(30);
@@ -103,12 +108,10 @@ void skillsRun() {
     chassis.waitUntilDone();
     slapperMotor.move_velocity(0);
     //corner curve
-    chassis.moveToPose(16,108,-90,2000, {.forwards=false});
+    chassis.moveToPose(16,111,90,4000);
     chassis.waitUntilDone();
-    // chassis.turnTo(-16, 108, 1000);
-    // chassis.waitUntilDone();
-    chassis.tank(50, 50);
-    pros::delay(320);
+    chassis.turnTo(-16, 108, 1000);
+    chassis.waitUntilDone();
     chassis.tank(-110, -110);
     pros::delay(320);
     chassis.tank(0, 0);
@@ -274,7 +277,6 @@ void six_ball() {
     pros::delay(590);
     wings.set_state(0);
     chassis.waitUntilDone();
-    pros::delay(80);
 
     chassis.moveToPoint(37, -55, 2000, {.forwards=false});
     chassis.tank(64, 64);
@@ -339,7 +341,8 @@ void opcontrol() {
         update_intake();
         update_slapper();
         update_lift();
-        wings.driver_update();
+        wings.driver_update_toggle();
+        rightWing.driver_update_toggle();
         rachet_p.driver_update();
 
         // get joystick positions

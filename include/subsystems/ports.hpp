@@ -46,7 +46,7 @@
 
 #define BUTTON_SLAPPER         pros::E_CONTROLLER_DIGITAL_A
 #define BUTTON_RIGHT_WING      pros::E_CONTROLLER_DIGITAL_B
-#define BUTTONG_LEFT_WING      pros::E_CONTROLLER_DIGITAL_DOWN
+#define BUTTON_LEFT_WING       pros::E_CONTROLLER_DIGITAL_DOWN
 //#define RACHET_ACT              
 //#define RACHET_DEACT
 //---------------------------------------------------------------
