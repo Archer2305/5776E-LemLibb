@@ -63,10 +63,9 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
  * to keep execution time for this mode under a few seconds.
  */
 
-// Please move this into drive.hpp, i cant figure out how to make it so im pasting it here
 
 
-void matchLoading(int time){
+void matchLoading(float time){
     wings.set_state(1);
     pros::delay(300);
     wings.set_state(0);
@@ -78,19 +77,19 @@ void matchLoading(int time){
     pros::delay(100);
     chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
     wings.set_state(1);
-    slapperMotor.move_velocity(55);
+    slapperMotor.move_velocity(60);
     pros::delay(time *1000);
     slapperMotor.move_velocity(0);
     wings.set_state(0);
     chassis.setBrakeMode(MOTOR_BRAKE_COAST);
 }
 
-void skillsRun(){
-    matchLoading(1);
+void skillsRun() {
+    matchLoading(23);
     pros::delay(280);
     chassis.moveToPoint(23, -20, 1000, {.forwards=false});
     chassis.moveToPoint(-6, 6, 1000);
-    slapperMotor.move_velocity(16);
+    slapperMotor.move_velocity(23);
     pros::delay(280);
     slapperMotor.move_velocity(0);
     // slapperMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -100,8 +99,9 @@ void skillsRun(){
     chassis.moveToPoint(-5,80,5000);
     chassis.waitUntilDone();
     slapperMotor.move_velocity(30);
-    slapperMotor.move_velocity(0);
     chassis.turnTo(0, 0, 1000);
+    chassis.waitUntilDone();
+    slapperMotor.move_velocity(0);
     //corner curve
     chassis.moveToPose(16,108,-90,2000, {.forwards=false});
     chassis.waitUntilDone();
@@ -114,29 +114,34 @@ void skillsRun(){
     chassis.tank(0, 0);
   
     wings.set_state(0);
-    chassis.moveToPose(51, 38, 128,1000);
-    chassis.moveToPose(64, 38, 90,1000);
-    chassis.turnTo(-8, 0, 1000);
+    chassis.moveToPose(51, 64, 128, 1000);
+    chassis.moveToPose(72, 59, 90, 1000);
+    chassis.turnTo(0, 0, 1000);
     chassis.waitUntilDone();
+   
     wings.set_state(1);
-    chassis.tank(-110, -110);
-    pros::delay(1000);
-    chassis.tank(0, 0);
-    wings.set_state(0);
-    chassis.moveToPose(64, 64, 30, 1000, {.forwards=false});
-    chassis.turnTo(0, 85, 2000);
-    wings.set_state(1);
-    chassis.tank(-110, -110);
-    pros::delay(800);
-    wings.set_state(0);
-    chassis.tank(0, 0);
-
-    printf("x: %lf, y: %lf", chassis.getPose().x, chassis.getPose().y);
-
-    chassis.moveToPose(72, 36, 100, 1000,{.forwards=false});
-    wings.set_state(1);
+    chassis.moveToPose(51, 88, 0, 1000, {.forwards=false});
     chassis.waitUntilDone();
     wings.set_state(0);
+    chassis.moveToPoint(chassis.getPose().x, 64, 1000);
+    chassis.moveToPose(88, 55, 0, 1000);
+    //wings.set_state(1);
+    //chassis.waitUntilDone();
+    //wings.set_state(0);
+   
+   // chassis.turnTo(0, 85, 2000);
+   // wings.set_state(1);
+   // chassis.tank(-110, -110);
+   // pros::delay(800);
+   // wings.set_state(0);
+   // chassis.tank(0, 0);
+//
+   // printf("x: %lf, y: %lf", chassis.getPose().x, chassis.getPose().y);
+
+    //chassis.moveToPose(72, 36, 100, 1000,{.forwards=false});
+    //wings.set_state(1);
+    //chassis.waitUntilDone();
+    //wings.set_state(0);
     //chassis.moveToPoint(15,110,1000, {.forwards=false});
     //chassis.moveToPoint(30,110,1000);
 }
@@ -160,29 +165,10 @@ void initialize() {
     });
 
     //Motor inits
-    liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
-#if 0 
-void elims() {
-    flipout();
-    chassis.moveToPoint(0, 16, 1000);
-    chassis.moveToPose(-12, 44, -97, 1000);
-    chassis.waitUntilDone();
-    intakeMotor.move_velocity(-600);
-    pros::delay(640);
-    intakeMotor.move_velocity(0);
 
-    chassis.turnTo(-12, 0, 1000);
-    chassis.waitUntilDone();
-    chassis.moveToPose(16, 42, 1000, false);
-    wings.set_state(1);
-    chassis.turnTo(25, 42, 1000, false);
-    chassis.waitUntilDone();
-    chassis.tank(-127, -127);
-    pros::delay(400);
-    chassis.tank(0, 0);
-}
-#endif
+
 /**
  * Runs while the robot is disabled
  */
@@ -202,15 +188,42 @@ ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 void flipout() {
     liftMotor.move_voltage(12000);
-    pros::delay(320);
+    pros::delay(326);
     liftMotor.move_voltage(0);
+}
+void elims() {
+    flipout();
+    chassis.moveToPoint(0, 42, 1000);
+    chassis.turnTo(25, 42, 1000, false);
+    intake.move_velocity(-600);
+    pros::delay(100);
+    chassis.waitUntilDone();
+    wings.set_state(1);
+    printf("====\n");
+    chassis.tank(-127, -127);
+    pros::delay(550);
+    chassis.tank(0, 0);
+    printf("========");
+    wings.set_state(0);
+    intake.move_velocity(0);
+    
+    chassis.tank(60, 60);
+    pros::delay(280);
+    chassis.tank(0, 0);
+
+    chassis.moveToPose(-23, -9, 180, 2000, {.forwards=false});
+    chassis.turnTo(42, 80, 1000);
+    chassis.tank(-50, -50);
+    pros::delay(280);
+    chassis.tank(0, 0);
 }
 
 void awp() {
     flipout();
-    chassis.moveToPoint(0, 16, 1000);
-    chassis.moveToPose(-8, 38, -93, 1000);
-    chassis.waitUntilDone();
+    chassis.moveToPoint(0, 16, 1000);           //16
+    chassis.moveToPose(-8, 38, -93, 1000);      //-93
+    //chassis.waitUntilDone();
+    pros::delay(320);
     intake.move_velocity(-600);
     pros::delay(640);
     intake.move_velocity(0);
@@ -236,7 +249,7 @@ void awp() {
     chassis.turnTo(chassis.getPose().x + 12, chassis.getPose().y, 1600);
     chassis.waitUntilDone();
     chassis.tank(80, 80);
-    pros::delay(180);
+    pros::delay(142);
     chassis.tank(0, 0);
 
     intake.move_velocity(-600);
@@ -253,12 +266,12 @@ void six_ball() {
     intake.move_velocity(0);
 
     chassis.moveToPoint(0, -30, 2000, {.forwards = false, .maxSpeed=88});
-    chassis.moveToPose(42, -59, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
+    chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
     //chassis.waitUntil(8);                                                             //|
     wings.set_state(1);
     //chassis.waitUntil(16);
-    pros::delay(580);
+    pros::delay(590);
     wings.set_state(0);
     chassis.waitUntilDone();
     pros::delay(80);
@@ -267,6 +280,7 @@ void six_ball() {
     chassis.tank(64, 64);
     pros::delay(100);
     chassis.tank(0, 0);
+
     chassis.moveToPose(32, -55, 95, 1000, {.maxSpeed = 64});
     chassis.waitUntilDone();
     intake.move_velocity(-600);
@@ -278,28 +292,49 @@ void six_ball() {
     chassis.tank(0, 0);
     intake.move_velocity(0);
 
+//get first barrier tb
     chassis.moveToPoint(51, 0, 1000, {.maxSpeed=95});
     intake.move_velocity(600);
     chassis.waitUntilDone();
     pros::delay(800);
     intake.move_velocity(0);
-    chassis.moveToPoint(63, -53, 1000);
+    chassis.moveToPoint(63, -59, 1000); //score
     pros::delay(320);
     intake.move_velocity(-600);
     chassis.waitUntilDone();
-    chassis.tank(-80, -80);
-    pros::delay(100);
-    chassis.tank(0, 0);
+    intake.move_velocity(0);
+#if 0
+    //second triball
+    chassis.moveToPose(55, 12, 80, 1000);
+    chassis.moveToPose(60, 0, 80, 1000);
+    intake.move_velocity(600);
+    chassis.waitUntilDone();
     intake.move_velocity(0);
 
+    chassis.moveToPoint(60, -59, 1000, {.forwards=false});
+    wings.set_state(1);
+    chassis.waitUntilDone();
+    wings.set_state(0);
+    chassis.moveToPoint(60, -42, 1000);
+
+    chassis.moveToPoint(60, -59, 1000);
+    pros::delay(280);
+    intake.move_velocity(-600);
+    chassis.waitUntilDone();
+    intake.move_velocity(0);
+    
+    chassis.tank(-80, -80);
+    pros::delay(280);
+    chassis.tank(0, 0);
+#endif
 }
 
 void autonomous() {
-    six_ball();
+    elims();
 }
 
 void opcontrol() {
-    //matchLoading(25);
+    //matchLoading(23.5);
     while (true) {
         update_intake();
         update_slapper();
@@ -309,6 +344,7 @@ void opcontrol() {
 
         // get joystick positions
         int input_brake = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+       #if 0
         if (input_brake > 100) {
             leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
             rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
@@ -318,7 +354,7 @@ void opcontrol() {
             rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_COAST);
             liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         }
-            
+        #endif  
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive

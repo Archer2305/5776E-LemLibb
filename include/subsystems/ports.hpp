@@ -2,17 +2,17 @@
 #define __PORTS_H__
 
 //----------drive----------
-#define RIGHT_FRONT     -14
-#define RIGHT_MIDDLE    -4
-#define RIGHT_BACK       8
+#define RIGHT_FRONT     10
+#define RIGHT_MIDDLE     4
+#define RIGHT_BACK       3
 
-#define LEFT_FRONT      20
-#define LEFT_MIDDLE      7
-#define LEFT_BACK       -6
+#define LEFT_FRONT      -8
+#define LEFT_MIDDLE     -6
+#define LEFT_BACK       -5
 //-------------------------
 
 //----------intake---------
-#define INTAKE1_PORT     12
+#define INTAKE1_PORT     1
 #define INTAKE2_PORT     13
 //-------------------------
 
@@ -21,16 +21,17 @@
 //------------------------
 
 //----------lift----------
-#define LIFT_PORT       3
+#define LIFT_PORT       14
 //------------------------
 
 //---------sensors----------
-#define IMU_PORT        1
+#define IMU_PORT        0
 //--------------------------
 
 //---------pneumatics----------
-#define WINGS_ADI       'A'
-#define RACHET_ADI      'B'
+#define LEFT_WING       'C'
+#define RIGHT_WING      'D'
+#define RACHET_ADI      'A'
 //-----------------------------
 
 //-------------------------buttons-------------------------------
@@ -43,7 +44,9 @@
 #define RACHET_ACT             pros::E_CONTROLLER_DIGITAL_Y
 #define RACHET_DEACT           pros::E_CONTROLLER_DIGITAL_RIGHT
 
-#define BUTTON_SLAPPER          pros::E_CONTROLLER_DIGITAL_A
+#define BUTTON_SLAPPER         pros::E_CONTROLLER_DIGITAL_A
+#define BUTTON_RIGHT_WING      pros::E_CONTROLLER_DIGITAL_B
+#define BUTTONG_LEFT_WING      pros::E_CONTROLLER_DIGITAL_DOWN
 //#define RACHET_ACT              
 //#define RACHET_DEACT
 //---------------------------------------------------------------
