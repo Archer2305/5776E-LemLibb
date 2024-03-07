@@ -31,7 +31,7 @@
 //---------pneumatics----------
 #define LEFT_WING       'C'
 #define RIGHT_WING      'D'
-#define RACHET_ADI      'A'
+#define RACHET_ADI      'E'
 //-----------------------------
 
 //-------------------------buttons-------------------------------

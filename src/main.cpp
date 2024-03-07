@@ -87,6 +87,9 @@ void matchLoading(float time){
     slapperMotor.move_velocity(0);
     wings.set_state(0);
     chassis.setBrakeMode(MOTOR_BRAKE_COAST);
+    
+    pros::delay(280);
+    chassis.moveToPoint(23, -23, 1000, {.forwards=false});  //push preloads in
 }
 
 void skillsRun() {
@@ -153,8 +156,7 @@ void skillsRun() {
 void new_skills() {
     matchLoading(0);
 
-    pros::delay(280);
-    chassis.moveToPoint(23, -23, 1000, {.forwards=false});  //push preloads in
+
 
     //along middle barrier
     chassis.moveToPoint(12, -23, 1000);
@@ -166,7 +168,7 @@ void new_skills() {
     chassis.waitUntilDone();
 
     //around short barrier
-    chassis.moveToPose(); //around, using front, run slapper  
+    //chassis.moveToPose(); //around, using front, run slapper  
 
 
 }
@@ -364,7 +366,7 @@ void autonomous() {
 }
 
 void opcontrol() {
-    //matchLoading(23.5);
+    //matchLoading(25);
     while (true) {
         update_intake();
         update_slapper();
@@ -386,6 +388,11 @@ void opcontrol() {
             liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         }
         #endif  
+
+        int input_skills = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
+        if (input_skills) 
+            matchLoading(25);
+
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         
