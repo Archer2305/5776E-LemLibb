@@ -66,12 +66,11 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 void matchLoading(float time){
-    //rightWing.set_state(1);
-    //pros::delay(320);
-    //rightWing.set_state(0);
-
+    intake.move_velocity(-600);
+    pros::delay(320);
     chassis.moveToPoint(10, -15, 1000, {.forwards=false, .maxSpeed=100});
-    pros::delay(100);
+    chassis.waitUntilDone();
+    intake.move_velocity(0);
     chassis.turnTo(42, 72, 1000);       //15 deg
     chassis.waitUntilDone();
     pros::delay(100);
@@ -82,14 +81,64 @@ void matchLoading(float time){
     pros::delay(800);
     chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
     wings.set_state(1);
-    slapperMotor.move_velocity(60);
+    slapperMotor.move_velocity(70);
     pros::delay(time *1000);
     slapperMotor.move_velocity(0);
     wings.set_state(0);
     chassis.setBrakeMode(MOTOR_BRAKE_COAST);
     
     pros::delay(280);
-    chassis.moveToPoint(23, -23, 1000, {.forwards=false});  //push preloads in
+    chassis.moveToPoint(24, -24, 1000, {.forwards=false});  //push preloads in
+}
+
+void new_skills() {
+    matchLoading(0);
+
+    //along middle barrier
+    chassis.moveToPoint(12, -23, 1000);
+    chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
+    chassis.waitUntilDone();
+    chassis.moveToPoint(97, 23, 3000, {.forwards=false, .maxSpeed=123});
+    wings.set_state(1);
+    rachet_p.set_state(1);
+    chassis.waitUntilDone();
+
+    //around short barrier
+    chassis.moveToPose(85, 18, -96, 1000);  //backup
+    wings.set_state(0);
+    chassis.moveToPoint(99, -36, 1000, {.forwards=false, .maxSpeed=92});
+    chassis.moveToPoint(123, -12, 1000, {.forwards=false, .maxSpeed=92});
+
+    //through alley 
+    chassis.moveToPoint(128, 42, 1000, {.forwards=false, .maxSpeed=100});
+    chassis.moveToPoint(125, 72, 1000, {.forwards=false, .maxSpeed=100});
+    chassis.waitUntilDone();    //temp
+
+    //curve
+    chassis.moveToPoint(100, 97, 1000, {.forwards=false, .maxSpeed=80});
+    chassis.turnTo(0, chassis.getPose().y+3, 1000, false);
+    chassis.waitUntilDone();
+    //chassis.moveToPoint(105, 93, 1000, {.maxSpeed=88});    
+    //chassis.waitUntilDone();
+    rightWing.set_state(1);
+
+    //push #1
+    //chassis.moveToPoint(93, 97, 1000, {.forwards=false});    
+    chassis.tank(-127, -127);
+    pros::delay(230);
+    chassis.tank(0, 0);
+    rightWing.set_state(0);
+
+    //push#2    
+    chassis.moveToPoint(105, 93, 1000);    
+    chassis.moveToPoint(97, 64, 1000, {.forwards=false});    
+    chassis.moveToPose(59, 53, -135, 1000, {.forwards=false});
+
+
+    //chassis.moveToPose(125, 16, 0, 2000, {.forwards=false});
+
+
+
 }
 
 void skillsRun() {
@@ -152,26 +201,6 @@ void skillsRun() {
     //chassis.moveToPoint(30,110,1000);
 }
 
-
-void new_skills() {
-    matchLoading(0);
-
-
-
-    //along middle barrier
-    chassis.moveToPoint(12, -23, 1000);
-    chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
-    chassis.waitUntilDone();
-    chassis.moveToPoint(100, 23, 3000, {.forwards=false});
-    wings.set_state(1);
-        //drop slapper
-    chassis.waitUntilDone();
-
-    //around short barrier
-    //chassis.moveToPose(); //around, using front, run slapper  
-
-
-}
 
 
 void initialize() {
@@ -391,7 +420,7 @@ void opcontrol() {
 
         int input_skills = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
         if (input_skills) 
-            matchLoading(25);
+            matchLoading(22);
 
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
