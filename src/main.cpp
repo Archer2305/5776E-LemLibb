@@ -104,41 +104,67 @@ void new_skills() {
     chassis.waitUntilDone();
 
     //around short barrier
-    chassis.moveToPose(85, 18, -96, 1000);  //backup
+    chassis.moveToPose(87, 18, -96, 1000);  //backup
     wings.set_state(0);
     chassis.moveToPoint(99, -36, 1000, {.forwards=false, .maxSpeed=92});
     chassis.moveToPoint(123, -12, 1000, {.forwards=false, .maxSpeed=92});
 
     //through alley 
     chassis.moveToPoint(128, 42, 1000, {.forwards=false, .maxSpeed=100});
-    chassis.moveToPoint(125, 72, 1000, {.forwards=false, .maxSpeed=100});
+    //rightWing.set_state(1);
+    chassis.moveToPoint(126, 75, 1000, {.forwards=false, .maxSpeed=72});
     chassis.waitUntilDone();    //temp
 
     //curve
-    chassis.moveToPoint(100, 97, 1000, {.forwards=false, .maxSpeed=80});
-    chassis.turnTo(0, chassis.getPose().y+3, 1000, false);
+    chassis.moveToPoint(105, 100, 1000, {.forwards=false, .maxSpeed=64});
+    chassis.turnTo(0, chassis.getPose().y + 1, 1000, false);
     chassis.waitUntilDone();
-    //chassis.moveToPoint(105, 93, 1000, {.maxSpeed=88});    
-    //chassis.waitUntilDone();
-    rightWing.set_state(1);
 
     //push #1
-    //chassis.moveToPoint(93, 97, 1000, {.forwards=false});    
+    chassis.tank(42, 42);
+    pros::delay(300);
     chassis.tank(-127, -127);
-    pros::delay(230);
+    pros::delay(329);
+    chassis.tank(42, 42);
+    pros::delay(300);
+    chassis.tank(-127, -127);
+    pros::delay(380);
     chassis.tank(0, 0);
     rightWing.set_state(0);
 
     //push#2    
     chassis.moveToPoint(105, 93, 1000);    
-    chassis.moveToPoint(97, 64, 1000, {.forwards=false});    
-    chassis.moveToPose(59, 53, -135, 1000, {.forwards=false});
+    controller.rumble("...");
+    chassis.moveToPoint(92, 59, 1000, {.forwards=false});    //64
 
+    chassis.moveToPoint(73, 59, 1000, {.forwards=false});
+    chassis.moveToPoint(70, 93, 1000, {.forwards=false}); 
+
+    chassis.moveToPose(97, 55, 90, 1000);       //bu
+    chassis.moveToPoint(46, 55, 1000, {.forwards=false});   //go to next push
+
+    //push#3
+    chassis.moveToPoint(46, 93, 1000, {.forwards=false});
+    chassis.moveToPose(62, 58, 90, 1000);       //bu
+    //chassis.moveToPoint(64, 55, 1000, {.forwards=false});   //go to next push
+    
+    //push#4
+    chassis.moveToPose(60, 93, 0, 1000, {.forwards=false});
+    pros::delay(320);
+    wings.set_state(1);
+    rightWing.set_state(1);
+    
+    //push # 5
+    chassis.moveToPose(68, 55, 90, 1000);
+    wings.set_state(0);
+    rightWing.set_state(0);
+    chassis.moveToPoint(36, 55, 1000, {.forwards=false, .maxSpeed=64});
+    chassis.moveToPoint(4, 88, 1000, {.forwards=false, .maxSpeed=64});
+
+
+    printf("x: %lf, y: %lf\n", chassis.getPose().x, chassis.getPose().y);
 
     //chassis.moveToPose(125, 16, 0, 2000, {.forwards=false});
-
-
-
 }
 
 void skillsRun() {
@@ -419,8 +445,18 @@ void opcontrol() {
         #endif  
 
         int input_skills = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
-        if (input_skills) 
+        if (input_skills) {
             matchLoading(22);
+            //along middle barrier
+            chassis.moveToPoint(12, -23, 1000);
+            chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
+            chassis.waitUntilDone();
+            chassis.moveToPoint(97, 23, 3000, {.forwards=false, .maxSpeed=123});
+            wings.set_state(1);
+            rachet_p.set_state(1);
+            chassis.waitUntilDone();
+            wings.set_state(0);
+        }
 
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
