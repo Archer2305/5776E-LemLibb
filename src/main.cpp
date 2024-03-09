@@ -66,8 +66,8 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 void matchLoading(float time){
-    intake.move_velocity(-600);
-    pros::delay(320);
+    intake.move_velocity(600);
+    pros::delay(480);
     chassis.moveToPoint(10, -15, 1000, {.forwards=false, .maxSpeed=100});
     chassis.waitUntilDone();
     intake.move_velocity(0);
@@ -247,30 +247,29 @@ void awp() {
     pros::delay(640);
     intake.move_velocity(0);
 
-    chassis.moveToPose(-20, 0, 42, 1600, {.forwards=false});
+    chassis.moveToPose(-21, 0, 42, 1600, {.forwards=false});
     chassis.turnTo(-20, -6, 1000, false);
     chassis.waitUntilDone();
     chassis.tank(-80, -80);
     pros::delay(64);
     chassis.tank(0, 0);
     wings.set_state(1);
-    chassis.turnTo(21, -8, 1000, false);
+    chassis.turnTo(22, -9, 1000, false);        //21, -8
     pros::delay(500);
     wings.set_state(0);
     chassis.turnTo(16, -10, 1000);
 
     chassis.turnTo(13, -9, 1600);
     chassis.waitUntilDone();
-    chassis.tank(80, 80);
-    pros::delay(610);
-    chassis.tank(0, 0);
-
-    chassis.turnTo(chassis.getPose().x + 12, chassis.getPose().y, 1600);
+    printf("%lf, %lf\n", chassis.getPose().x, chassis.getPose().y);
+    chassis.moveToPoint(4, -16, 1000); 
     chassis.waitUntilDone();
-    chassis.moveToPoint(22, -7, 1000);
+    chassis.moveToPose(25, -16, 90, 1000);     //-7
     intake.move_velocity(-600);
     pros::delay(1600);
     intake.move_velocity(0);
+#if 0
+#endif
 }
 
 void elims() {
@@ -376,7 +375,7 @@ void tuning() {
 }
 
 void autonomous() {
-    six_ball();
+    new_skills();
 }
 
 void opcontrol() {
