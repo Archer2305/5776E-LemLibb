@@ -96,9 +96,9 @@ void new_skills() {
 
     //along middle barrier
     chassis.moveToPoint(12, -23, 1000);
-    chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
+    chassis.moveToPose(17, 22, 36, 1000, {.forwards=false, .maxSpeed=88});
     chassis.waitUntilDone();
-    chassis.moveToPoint(93, 22, 3000, {.forwards=false, .maxSpeed=125});
+    chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=125});
     wings.set_state(1);
     rachet_p.set_state(1);
     chassis.waitUntilDone();
@@ -116,8 +116,8 @@ void new_skills() {
     chassis.waitUntilDone();    //temp
 
     //curve
-    chassis.moveToPoint(105, 100, 1000, {.forwards=false, .maxSpeed=72});
-    chassis.turnTo(0, chassis.getPose().y + 8, 1000, false, 88);
+    chassis.moveToPoint(105, 101, 1000, {.forwards=false, .maxSpeed=72});
+    chassis.turnTo(0, 105, 1000, false, 88);
     chassis.waitUntilDone();
 
     //push #1
@@ -135,17 +135,17 @@ void new_skills() {
     //push#2    
     chassis.moveToPoint(105, 93, 1000);    
     controller.rumble("...");
-    chassis.moveToPoint(92, 60, 1000,{.forwards=false});    //64
+    chassis.moveToPoint(85, 60, 1000,{.forwards=false});    //64
 
-    chassis.moveToPoint(73, 60, 1000, {.forwards=false});   //73
-    chassis.moveToPoint(64, 96, 1000, {.forwards=false}); 
+    chassis.moveToPoint(82, 60, 1000, {.forwards=false});   //73
+    chassis.moveToPoint(70, 96, 1000, {.forwards=false}); 
 
-    chassis.moveToPose(97, 57, 90, 1000);       //bu
-    chassis.moveToPoint(42, 60, 1000, {.forwards=false});   //go to next push
+    chassis.moveToPose(97, 57, 90, 1000);       //back up
+    chassis.moveToPoint(42, 64, 1000, {.forwards=false, .maxSpeed=100});   //go to next push
 
     //push#3
-    chassis.moveToPoint(48, 96, 1200, {.forwards=false});
-    chassis.moveToPose(77, 58, 90, 1000);       //bu
+    chassis.moveToPoint(53, 96, 1200, {.forwards=false});
+    chassis.moveToPose(80, 60, 90, 1000);       //bu
     //chassis.moveToPoint(64, 55, 1000, {.forwards=false});   //go to next push
     
     //push#4
@@ -159,18 +159,20 @@ void new_skills() {
     pros::delay(280);
     wings.set_state(0);
     rightWing.set_state(0);
-    chassis.moveToPoint(28, 57, 1000, {.forwards=false, .maxSpeed=72});
-    chassis.moveToPoint(6, 96, 1000, {.forwards=false, .maxSpeed=72});  //12, 88
-    chassis.moveToPoint(-12, 96, 1000, {.forwards=false, .maxSpeed=72});  //12, 88
+
+    chassis.moveToPoint(42, 64, 1000, {.forwards=false, .maxSpeed=72});         //36
+    chassis.moveToPoint(0, 96, 1000, {.forwards=false, .maxSpeed=72});  //12
     wings.set_state(1);
+    chassis.moveToPoint(-8, 76, 1000, {.forwards=false, .maxSpeed=64});    //2
+    //chassis.moveToPoint(16, 100, 1000, {.forwards=false, .maxSpeed=64});    //2
+    chassis.turnTo(0, 0, 1000);
+//wings 
+    chassis.moveToPoint(12, 108, 1000, {.forwards=false});
+    //chassis.moveToPoint(23, 112, 1000, {.forwards=false, .maxSpeed=80}); 
 
-    chassis.moveToPoint(0, 95, 1000, {.forwards=false, .maxSpeed=64}); 
-    pros::delay(280);
-    wings.set_state(0);
-    chassis.moveToPoint(23, 112, 1000, {.forwards=false, .maxSpeed=80}); 
-
-    chassis.turnTo(1000, chassis.getPose().y, 1000, false);
+    chassis.turnTo(1000, 108, 1000, false);
     chassis.waitUntilDone();
+    wings.set_state(0);
 
     //push#6
     chassis.tank(42, 42);
@@ -181,8 +183,9 @@ void new_skills() {
     pros::delay(300);
     chassis.tank(-127, -127);
     pros::delay(380);
-    chassis.tank(0, 0);
-
+    chassis.tank(16, 16);
+#if 0
+#endif
     printf("x: %lf, y: %lf\n", chassis.getPose().x, chassis.getPose().y);
 
     //chassis.moveToPose(125, 16, 0, 2000, {.forwards=false});
@@ -230,10 +233,46 @@ void competition_initialize() {}
 ASSET(example_txt); // '.' replaced with "_" to make c++ happy
 
 void flipout() {
-    intake.move_velocity(-600);
+    intake.move_velocity(600);
     pros::delay(320);
     intake.move_velocity(0);
 }
+void awp() {
+    flipout();
+    chassis.moveToPoint(0, 16, 1000);           //16
+    chassis.moveToPose(-8, 38, -93, 1000);      //-93
+    //chassis.waitUntilDone();
+    pros::delay(320);
+    intake.move_velocity(-600);
+    pros::delay(640);
+    intake.move_velocity(0);
+
+    chassis.moveToPose(-20, 0, 42, 1600, {.forwards=false});
+    chassis.turnTo(-20, -6, 1000, false);
+    chassis.waitUntilDone();
+    chassis.tank(-80, -80);
+    pros::delay(64);
+    chassis.tank(0, 0);
+    wings.set_state(1);
+    chassis.turnTo(21, -8, 1000, false);
+    pros::delay(500);
+    wings.set_state(0);
+    chassis.turnTo(16, -10, 1000);
+
+    chassis.turnTo(13, -9, 1600);
+    chassis.waitUntilDone();
+    chassis.tank(80, 80);
+    pros::delay(610);
+    chassis.tank(0, 0);
+
+    chassis.turnTo(chassis.getPose().x + 12, chassis.getPose().y, 1600);
+    chassis.waitUntilDone();
+    chassis.moveToPoint(22, -7, 1000);
+    intake.move_velocity(-600);
+    pros::delay(1600);
+    intake.move_velocity(0);
+}
+
 void elims() {
     flipout();
     chassis.moveToPoint(0, 42, 1000);
@@ -261,44 +300,6 @@ void elims() {
     chassis.tank(0, 0);
 }
 
-void awp() {
-    flipout();
-    chassis.moveToPoint(0, 16, 1000);           //16
-    chassis.moveToPose(-8, 38, -93, 1000);      //-93
-    //chassis.waitUntilDone();
-    pros::delay(320);
-    intake.move_velocity(-600);
-    pros::delay(640);
-    intake.move_velocity(0);
-
-    chassis.moveToPose(-28, 0, 42, 1600, {.forwards=false});
-    chassis.turnTo(-20, -6, 1000, false);
-    chassis.waitUntilDone();
-    chassis.tank(-80, -80);
-    pros::delay(64);
-    chassis.tank(0, 0);
-    wings.set_state(1);
-    chassis.turnTo(21, -8, 1000, false);
-    pros::delay(500);
-    wings.set_state(0);
-    chassis.turnTo(16, -10, 1000);
-
-    chassis.turnTo(13, -9, 1600);
-    chassis.waitUntilDone();
-    chassis.tank(80, 80);
-    pros::delay(610);
-    chassis.tank(0, 0);
-
-    chassis.turnTo(chassis.getPose().x + 12, chassis.getPose().y, 1600);
-    chassis.waitUntilDone();
-    chassis.tank(80, 80);
-    pros::delay(162);
-    chassis.tank(0, 0);
-    intake.move_velocity(-600);
-    pros::delay(1600);
-    intake.move_velocity(0);
-}
-
 void six_ball() {
     flipout();
 
@@ -307,7 +308,7 @@ void six_ball() {
     pros::delay(420);
     intake.move_velocity(0);
 
-    chassis.moveToPoint(0, -30, 2000, {.forwards = false, .maxSpeed=88});
+    chassis.moveToPoint(0, -26, 2000, {.forwards = false, .maxSpeed=88});
     chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
     //chassis.waitUntil(8);                                                             //|
@@ -375,7 +376,7 @@ void tuning() {
 }
 
 void autonomous() {
-    awp();
+    six_ball();
 }
 
 void opcontrol() {
