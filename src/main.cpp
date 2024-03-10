@@ -71,7 +71,7 @@ void matchLoading(float time){
     chassis.moveToPoint(10, -15, 1000, {.forwards=false, .maxSpeed=100});
     chassis.waitUntilDone();
     intake.move_velocity(0);
-    chassis.turnTo(42, 72, 1000);       //15 deg
+    chassis.turnTo(48, 72, 1000);       //15 deg
     chassis.waitUntilDone();
     pros::delay(100);
     chassis.tank(-36, -36);
@@ -92,13 +92,13 @@ void matchLoading(float time){
 }
 
 void new_skills() {
-    matchLoading(0);
+    matchLoading(22);
 
     //along middle barrier
     chassis.moveToPoint(12, -23, 1000);
     chassis.moveToPose(17, 22, 36, 1000, {.forwards=false, .maxSpeed=88});
     chassis.waitUntilDone();
-    chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=125});
+    chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=127});
     wings.set_state(1);
     rachet_p.set_state(1);
     chassis.waitUntilDone();
@@ -155,7 +155,7 @@ void new_skills() {
     rightWing.set_state(1);
     
     //push # 5
-    chassis.moveToPose(68, 57, 90, 1000);
+    chassis.moveToPose(68, 59, 90, 1000);
     pros::delay(280);
     wings.set_state(0);
     rightWing.set_state(0);
@@ -239,6 +239,12 @@ void flipout() {
 }
 void awp() {
     flipout();
+    chassis.tank(-127, -127);
+    pros::delay(2000);
+    chassis.tank(32, 32);
+    pros::delay(2000);
+    chassis.tank(0, 0);
+#if 0
     chassis.moveToPoint(0, 16, 1000);           //16
     chassis.moveToPose(-8, 38, -93, 1000);      //-93
     //chassis.waitUntilDone();
@@ -262,13 +268,12 @@ void awp() {
     chassis.turnTo(13, -9, 1600);
     chassis.waitUntilDone();
     printf("%lf, %lf\n", chassis.getPose().x, chassis.getPose().y);
-    chassis.moveToPoint(4, -16, 1000); 
+    chassis.moveToPoint(6, -14, 1000); 
     chassis.waitUntilDone();
     chassis.moveToPose(25, -16, 90, 1000);     //-7
     intake.move_velocity(-600);
     pros::delay(1600);
     intake.move_velocity(0);
-#if 0
 #endif
 }
 
@@ -407,13 +412,12 @@ void opcontrol() {
             matchLoading(22);
             //along middle barrier
             chassis.moveToPoint(12, -23, 1000);
-            chassis.moveToPose(17, 24, 36, 1000, {.forwards=false, .maxSpeed=88});
+            chassis.moveToPose(17, 22, 36, 1000, {.forwards=false, .maxSpeed=88});
             chassis.waitUntilDone();
-            chassis.moveToPoint(97, 23, 3000, {.forwards=false, .maxSpeed=123});
+            chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=125});
             wings.set_state(1);
             rachet_p.set_state(1);
             chassis.waitUntilDone();
-            wings.set_state(0);
         }
 
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
