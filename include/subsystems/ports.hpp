@@ -2,18 +2,18 @@
 #define __PORTS_H__
 
 //----------drive----------
-#define RIGHT_FRONT     10
-#define RIGHT_MIDDLE     4
-#define RIGHT_BACK       3
+#define RIGHT_FRONT     18
+#define RIGHT_MIDDLE    19
+#define RIGHT_BACK      20 
 
-#define LEFT_FRONT      -8
-#define LEFT_MIDDLE     -6
-#define LEFT_BACK       -5
+#define LEFT_FRONT      -1
+#define LEFT_MIDDLE     -4
+#define LEFT_BACK       -3
 //-------------------------
 
 //----------intake---------
-#define INTAKE1_PORT     1
-#define INTAKE2_PORT     13
+#define INTAKE1_PORT     10
+#define INTAKE2_PORT     11
 //-------------------------
 
 //--------slapper---------
@@ -31,7 +31,7 @@
 //---------pneumatics----------
 #define LEFT_WING       'C'
 #define RIGHT_WING      'D'
-#define RACHET_ADI      'E'
+#define HANG_ADI        'B'
 //-----------------------------
 
 //-------------------------buttons-------------------------------
@@ -41,8 +41,8 @@
 #define WINGS_ACTUATE_O         pros::E_CONTROLLER_DIGITAL_B
 #define WINGS_ACTUATE_I         pros::E_CONTROLLER_DIGITAL_DOWN
 
-#define RACHET_ACT             pros::E_CONTROLLER_DIGITAL_Y
-#define RACHET_DEACT           pros::E_CONTROLLER_DIGITAL_RIGHT
+#define RACHET_ACT             pros::E_CONTROLLER_DIGITAL_L1
+#define RACHET_DEACT           pros::E_CONTROLLER_DIGITAL_L2
 
 #define BUTTON_SLAPPER         pros::E_CONTROLLER_DIGITAL_A
 #define BUTTON_RIGHT_WING      pros::E_CONTROLLER_DIGITAL_B

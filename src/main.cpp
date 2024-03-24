@@ -279,18 +279,18 @@ void awp() {
 
 void elims() {
     flipout();
-    chassis.moveToPoint(0, 42, 1000);
-    chassis.turnTo(25, 42, 1000, false);
+    chassis.moveToPoint(0, 39, 1000);
+    chassis.turnTo(25, 39, 1000, false);
     intake.move_velocity(-600);
     pros::delay(100);
     chassis.waitUntilDone();
-    wings.set_state(1);
+    rightWing.set_state(1);
     printf("====\n");
     chassis.tank(-127, -127);
-    pros::delay(550);
+    pros::delay(480);
     chassis.tank(0, 0);
     printf("========");
-    wings.set_state(0);
+    rightWing.set_state(0);
     intake.move_velocity(0);
     
     chassis.tank(60, 60);
@@ -380,7 +380,7 @@ void tuning() {
 }
 
 void autonomous() {
-    new_skills();
+    elims();
 }
 
 void opcontrol() {
