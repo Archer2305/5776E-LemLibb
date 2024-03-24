@@ -1,6 +1,7 @@
 #include "main.h"
 #include "lemlib/api.hpp"
 #include "subsystems/slapper.hpp"
+#include "subsystems/wings.hpp"
 
 // drive motors
 pros::Motor leftFront(LEFT_FRONT, pros::E_MOTOR_GEARSET_06);
@@ -65,131 +66,6 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 
-void matchLoading(float time){
-    intake.move_velocity(600);
-    pros::delay(480);
-    chassis.moveToPoint(10, -15, 1000, {.forwards=false, .maxSpeed=100});
-    chassis.waitUntilDone();
-    intake.move_velocity(0);
-    chassis.turnTo(48, 72, 1000);       //15 deg
-    chassis.waitUntilDone();
-    pros::delay(100);
-    chassis.tank(-36, -36);
-    pros::delay(165);
-    chassis.tank(0, 0);
-    
-    pros::delay(800);
-    chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
-    wings.set_state(1);
-    slapperMotor.move_velocity(70);
-    pros::delay(time *1000);
-    slapperMotor.move_velocity(0);
-    wings.set_state(0);
-    chassis.setBrakeMode(MOTOR_BRAKE_COAST);
-    
-    pros::delay(280);
-    chassis.moveToPoint(24, -24, 1000, {.forwards=false});  //push preloads in
-}
-
-void new_skills() {
-    matchLoading(22);
-
-    //along middle barrier
-    chassis.moveToPoint(12, -23, 1000);
-    chassis.moveToPose(17, 22, 36, 1000, {.forwards=false, .maxSpeed=88});
-    chassis.waitUntilDone();
-    chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=127});
-    wings.set_state(1);
-    rachet_p.set_state(1);
-    chassis.waitUntilDone();
-
-    //around short barrier
-    chassis.moveToPose(87, 18, -93, 1000);  //backup
-    wings.set_state(0);
-    chassis.moveToPoint(99, -36, 1000, {.forwards=false, .maxSpeed=92});
-    chassis.moveToPoint(123, -12, 1000, {.forwards=false, .maxSpeed=92});
-
-    //through alley 
-    chassis.moveToPoint(128, 42, 1000, {.forwards=false, .maxSpeed=72});
-    //rightWing.set_state(1);
-    chassis.moveToPoint(125, 72, 1000, {.forwards=false, .maxSpeed=72});    //74
-    chassis.waitUntilDone();    //temp
-
-    //curve
-    chassis.moveToPoint(105, 101, 1000, {.forwards=false, .maxSpeed=72});
-    chassis.turnTo(0, 105, 1000, false, 88);
-    chassis.waitUntilDone();
-
-    //push #1
-    chassis.tank(42, 42);
-    pros::delay(300);
-    chassis.tank(-127, -127);
-    pros::delay(329);
-    chassis.tank(42, 42);
-    pros::delay(300);
-    chassis.tank(-127, -127);
-    pros::delay(380);
-    chassis.tank(0, 0);
-    rightWing.set_state(0);
-
-    //push#2    
-    chassis.moveToPoint(105, 93, 1000);    
-    controller.rumble("...");
-    chassis.moveToPoint(85, 60, 1000,{.forwards=false});    //64
-
-    chassis.moveToPoint(82, 60, 1000, {.forwards=false});   //73
-    chassis.moveToPoint(70, 96, 1000, {.forwards=false}); 
-
-    chassis.moveToPose(97, 57, 90, 1000);       //back up
-    chassis.moveToPoint(42, 64, 1000, {.forwards=false, .maxSpeed=100});   //go to next push
-
-    //push#3
-    chassis.moveToPoint(53, 96, 1200, {.forwards=false});
-    chassis.moveToPose(80, 60, 90, 1000);       //bu
-    //chassis.moveToPoint(64, 55, 1000, {.forwards=false});   //go to next push
-    
-    //push#4
-    chassis.moveToPose(60, 101, 0, 1200, {.forwards=false});            //push fw 101
-    pros::delay(320);
-    wings.set_state(1);
-    rightWing.set_state(1);
-    
-    //push # 5
-    chassis.moveToPose(68, 59, 90, 1000);
-    pros::delay(280);
-    wings.set_state(0);
-    rightWing.set_state(0);
-
-    chassis.moveToPoint(42, 64, 1000, {.forwards=false, .maxSpeed=72});         //36
-    chassis.moveToPoint(0, 96, 1000, {.forwards=false, .maxSpeed=72});  //12
-    wings.set_state(1);
-    chassis.moveToPoint(-8, 76, 1000, {.forwards=false, .maxSpeed=64});    //2
-    //chassis.moveToPoint(16, 100, 1000, {.forwards=false, .maxSpeed=64});    //2
-    chassis.turnTo(0, 0, 1000);
-//wings 
-    chassis.moveToPoint(12, 108, 1000, {.forwards=false});
-    //chassis.moveToPoint(23, 112, 1000, {.forwards=false, .maxSpeed=80}); 
-
-    chassis.turnTo(1000, 108, 1000, false);
-    chassis.waitUntilDone();
-    wings.set_state(0);
-
-    //push#6
-    chassis.tank(42, 42);
-    pros::delay(300);
-    chassis.tank(-127, -127);
-    pros::delay(329);
-    chassis.tank(42, 42);
-    pros::delay(300);
-    chassis.tank(-127, -127);
-    pros::delay(380);
-    chassis.tank(16, 16);
-#if 0
-#endif
-    printf("x: %lf, y: %lf\n", chassis.getPose().x, chassis.getPose().y);
-
-    //chassis.moveToPose(125, 16, 0, 2000, {.forwards=false});
-}
 
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
@@ -210,8 +86,6 @@ void initialize() {
         }
     });
 
-    //Motor inits
-    liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
 
 
@@ -239,42 +113,6 @@ void flipout() {
 }
 void awp() {
     flipout();
-    chassis.tank(-127, -127);
-    pros::delay(2000);
-    chassis.tank(32, 32);
-    pros::delay(2000);
-    chassis.tank(0, 0);
-#if 0
-    chassis.moveToPoint(0, 16, 1000);           //16
-    chassis.moveToPose(-8, 38, -93, 1000);      //-93
-    //chassis.waitUntilDone();
-    pros::delay(320);
-    intake.move_velocity(-600);
-    pros::delay(640);
-    intake.move_velocity(0);
-
-    chassis.moveToPose(-21, 0, 42, 1600, {.forwards=false});
-    chassis.turnTo(-20, -6, 1000, false);
-    chassis.waitUntilDone();
-    chassis.tank(-80, -80);
-    pros::delay(64);
-    chassis.tank(0, 0);
-    wings.set_state(1);
-    chassis.turnTo(22, -9, 1000, false);        //21, -8
-    pros::delay(500);
-    wings.set_state(0);
-    chassis.turnTo(16, -10, 1000);
-
-    chassis.turnTo(13, -9, 1600);
-    chassis.waitUntilDone();
-    printf("%lf, %lf\n", chassis.getPose().x, chassis.getPose().y);
-    chassis.moveToPoint(6, -14, 1000); 
-    chassis.waitUntilDone();
-    chassis.moveToPose(25, -16, 90, 1000);     //-7
-    intake.move_velocity(-600);
-    pros::delay(1600);
-    intake.move_velocity(0);
-#endif
 }
 
 void elims() {
@@ -284,13 +122,13 @@ void elims() {
     intake.move_velocity(-600);
     pros::delay(100);
     chassis.waitUntilDone();
-    rightWing.set_state(1);
+    right_wing.set_state(1);
     printf("====\n");
     chassis.tank(-127, -127);
     pros::delay(480);
     chassis.tank(0, 0);
     printf("========");
-    rightWing.set_state(0);
+    right_wing.set_state(0);
     intake.move_velocity(0);
     
     chassis.tank(60, 60);
@@ -316,10 +154,10 @@ void six_ball() {
     chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
     //chassis.waitUntil(8);                                                             //|
-    wings.set_state(1);
+    left_wing.set_state(1);
     //chassis.waitUntil(16);
     pros::delay(590);
-    wings.set_state(0);
+    left_wing.set_state(0);
     chassis.waitUntilDone();
 
     chassis.moveToPoint(37, -55, 2000, {.forwards=false});
@@ -377,21 +215,23 @@ void six_ball() {
 
 void tuning() {
     chassis.turnTo(24, 0, 2000);
+    chassis.waitUntilDone();
+    pros::delay(1000);
+    chassis.moveToPoint(0, 24, 2000);
 }
 
 void autonomous() {
-    elims();
+    tuning();
 }
 
 void opcontrol() {
-    //matchLoading(25);
     while (true) {
         update_intake();
         update_slapper();
         update_lift();
-        wings.driver_update_toggle();
-        rightWing.driver_update_toggle();
-        rachet_p.driver_update();
+        left_wing.driver_update_toggle();
+        right_wing.driver_update_toggle();
+        hang.driver_update();
 
         // get joystick positions
         int input_brake = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
@@ -407,25 +247,10 @@ void opcontrol() {
         }
         #endif  
 
-        int input_skills = controller.get_digital(pros::E_CONTROLLER_DIGITAL_X);
-        if (input_skills) {
-            matchLoading(22);
-            //along middle barrier
-            chassis.moveToPoint(12, -23, 1000);
-            chassis.moveToPose(17, 22, 36, 1000, {.forwards=false, .maxSpeed=88});
-            chassis.waitUntilDone();
-            chassis.moveToPoint(95, 22, 3000, {.forwards=false, .maxSpeed=125});
-            wings.set_state(1);
-            rachet_p.set_state(1);
-            chassis.waitUntilDone();
-        }
-
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         
-        // move the chassis with curvature drive
         chassis.curvature(abs(leftY) > 16 ? leftY : 0, abs(rightX) > 16 ? rightX : 0);
-        // delay to save resources
         pros::delay(10);
     }
 }

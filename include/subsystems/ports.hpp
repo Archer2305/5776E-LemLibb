@@ -25,12 +25,12 @@
 //------------------------
 
 //---------sensors----------
-#define IMU_PORT       21
+#define IMU_PORT        5
 //--------------------------
 
 //---------pneumatics----------
 #define LEFT_WING       'C'
-#define RIGHT_WING      'D'
+#define RIGHT_WING      'A'
 #define HANG_ADI        'B'
 //-----------------------------
 
@@ -41,14 +41,12 @@
 #define WINGS_ACTUATE_O         pros::E_CONTROLLER_DIGITAL_B
 #define WINGS_ACTUATE_I         pros::E_CONTROLLER_DIGITAL_DOWN
 
-#define RACHET_ACT             pros::E_CONTROLLER_DIGITAL_L1
-#define RACHET_DEACT           pros::E_CONTROLLER_DIGITAL_L2
+#define HANG_EXT                pros::E_CONTROLLER_DIGITAL_L1
+#define HANG_RET                pros::E_CONTROLLER_DIGITAL_L2
 
 #define BUTTON_SLAPPER         pros::E_CONTROLLER_DIGITAL_A
 #define BUTTON_RIGHT_WING      pros::E_CONTROLLER_DIGITAL_B
 #define BUTTON_LEFT_WING       pros::E_CONTROLLER_DIGITAL_DOWN
-//#define RACHET_ACT              
-//#define RACHET_DEACT
 //---------------------------------------------------------------
 
 #endif

@@ -4,6 +4,6 @@
 #include "subsystems/pneumatics.hpp"
 
 class pneumaticSys;
-extern pneumaticSys wings;
-extern pneumaticSys rightWing;
+extern pneumaticSys left_wing;
+extern pneumaticSys right_wing;
 #endif
