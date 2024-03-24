@@ -1,7 +1,5 @@
 #include "main.h"
 #include "lemlib/api.hpp"
-#include "subsystems/slapper.hpp"
-#include "subsystems/wings.hpp"
 
 // drive motors
 pros::Motor leftFront(LEFT_FRONT, pros::E_MOTOR_GEARSET_06);
@@ -16,7 +14,7 @@ pros::MotorGroup leftMotors({leftFront, leftMiddle, leftBack});
 pros::MotorGroup rightMotors({rightFront, rightMiddle, rightBack});
 
 // Inertial Sensor on port 2
-pros::Imu imu(IMU_PORT);
+pros::Imu imu(15);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors,                  // left motor group
@@ -111,9 +109,6 @@ void flipout() {
     pros::delay(320);
     intake.move_velocity(0);
 }
-void awp() {
-    flipout();
-}
 
 void elims() {
     flipout();
@@ -145,19 +140,17 @@ void elims() {
 void six_ball() {
     flipout();
 
-    intake.move_velocity(600);
+    //intake.move_velocity(600);
     chassis.moveToPoint(0, 4, 1000, {.maxSpeed = 16});
     pros::delay(420);
-    intake.move_velocity(0);
+    //intake.move_velocity(0);
 
     chassis.moveToPoint(0, -26, 2000, {.forwards = false, .maxSpeed=88});
     chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
-    //chassis.waitUntil(8);                                                             //|
-    left_wing.set_state(1);
-    //chassis.waitUntil(16);
+    right_wing.set_state(1);
     pros::delay(590);
-    left_wing.set_state(0);
+    right_wing.set_state(0);
     chassis.waitUntilDone();
 
     chassis.moveToPoint(37, -55, 2000, {.forwards=false});
@@ -167,26 +160,26 @@ void six_ball() {
 
     chassis.moveToPose(32, -55, 95, 1000, {.maxSpeed = 64});
     chassis.waitUntilDone();
-    intake.move_velocity(-600);
+    //intake.move_velocity(-600);
     pros::delay(250);
     chassis.tank(88, 88);
     pros::delay(380);
     chassis.tank(-80, -80);
     pros::delay(400);
     chassis.tank(0, 0);
-    intake.move_velocity(0);
+    //intake.move_velocity(0);
 
 //get first barrier tb
     chassis.moveToPoint(51, 0, 1000, {.maxSpeed=95});
-    intake.move_velocity(600);
+    //intake.move_velocity(600);
     chassis.waitUntilDone();
     pros::delay(800);
-    intake.move_velocity(0);
+    //intake.move_velocity(0);
     chassis.moveToPoint(63, -59, 1000); //score
     pros::delay(320);
-    intake.move_velocity(-600);
+    //intake.move_velocity(-600);
     chassis.waitUntilDone();
-    intake.move_velocity(0);
+    //intake.move_velocity(0);
 #if 0
     //second triball
     chassis.moveToPose(55, 12, 80, 1000);
@@ -214,14 +207,29 @@ void six_ball() {
 }
 
 void tuning() {
-    chassis.turnTo(24, 0, 2000);
+    chassis.moveToPoint(0, 24, 2000);
     chassis.waitUntilDone();
     pros::delay(1000);
-    chassis.moveToPoint(0, 24, 2000);
+    chassis.turnTo(24, 0, 2000);
+}
+
+void awp() {
+    chassis.moveToPoint(0, -8, 1000, {.forwards=false});
+    pros::delay(500);
+    left_wing.set_state(1);
+    chassis.moveToPoint(0, 2, 2000, {.maxSpeed=32});
+    chassis.turnTo(-3, 9, 2000, true, 32);
+    pros::delay(100);
+    left_wing.set_state(0);
+    //chassis.turnTo(-24, 34, 2000, true, 32);
+    //chassis.waitUntilDone();
+    pros::delay(100);
+    chassis.moveToPose(-28, 34, -45, 5000, {.maxSpeed=64});
+    intake.move_velocity(-600);
 }
 
 void autonomous() {
-    tuning();
+    awp();
 }
 
 void opcontrol() {

@@ -13,7 +13,7 @@
 
 //----------intake---------
 #define INTAKE1_PORT     10
-#define INTAKE2_PORT     11
+#define INTAKE2_PORT     5
 //-------------------------
 
 //--------slapper---------
