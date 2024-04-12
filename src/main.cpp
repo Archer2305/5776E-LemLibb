@@ -66,9 +66,9 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 
 void matchLoading(float time){
-    wings.set_state(1);
+    leftWing.set_state(1);
     pros::delay(300);
-    wings.set_state(0);
+    leftWing.set_state(0);
 
     chassis.moveToPose(0, -13, 22, 2000, {.forwards=false, .maxSpeed=100});
     pros::delay(100);
@@ -76,11 +76,11 @@ void matchLoading(float time){
     chassis.waitUntilDone();
     pros::delay(100);
     chassis.setBrakeMode(MOTOR_BRAKE_HOLD);
-    wings.set_state(1);
+    leftWing.set_state(1);
     slapperMotor.move_velocity(60);
     pros::delay(time *1000);
     slapperMotor.move_velocity(0);
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.setBrakeMode(MOTOR_BRAKE_COAST);
 }
 
@@ -113,16 +113,16 @@ void skillsRun() {
     pros::delay(320);
     chassis.tank(0, 0);
   
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.moveToPose(51, 64, 128, 1000);
     chassis.moveToPose(72, 59, 90, 1000);
     chassis.turnTo(0, 0, 1000);
     chassis.waitUntilDone();
    
-    wings.set_state(1);
+    leftWing.set_state(1);
     chassis.moveToPose(51, 88, 0, 1000, {.forwards=false});
     chassis.waitUntilDone();
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.moveToPoint(chassis.getPose().x, 64, 1000);
     chassis.moveToPose(88, 55, 0, 1000);
     //wings.set_state(1);
@@ -198,13 +198,13 @@ void elims() {
     intake.move_velocity(-600);
     pros::delay(100);
     chassis.waitUntilDone();
-    wings.set_state(1);
+    leftWing.set_state(1);
     printf("====\n");
     chassis.tank(-127, -127);
     pros::delay(550);
     chassis.tank(0, 0);
     printf("========");
-    wings.set_state(0);
+    leftWing.set_state(0);
     intake.move_velocity(0);
     
     chassis.tank(60, 60);
@@ -234,10 +234,10 @@ void awp() {
     chassis.tank(-80, -80);
     pros::delay(64);
     chassis.tank(0, 0);
-    wings.set_state(1);
+    leftWing.set_state(1);
     chassis.turnTo(21, -8, 1000, false);
     pros::delay(500);
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.turnTo(16, -10, 1000);
 
     chassis.turnTo(13, -9, 1600);
@@ -269,10 +269,10 @@ void six_ball() {
     chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
     pros::delay(170);
     //chassis.waitUntil(8);                                                             //|
-    wings.set_state(1);
+    leftWing.set_state(1);
     //chassis.waitUntil(16);
     pros::delay(590);
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.waitUntilDone();
     pros::delay(80);
 
@@ -312,9 +312,9 @@ void six_ball() {
     intake.move_velocity(0);
 
     chassis.moveToPoint(60, -59, 1000, {.forwards=false});
-    wings.set_state(1);
+    leftWing.set_state(1);
     chassis.waitUntilDone();
-    wings.set_state(0);
+    leftWing.set_state(0);
     chassis.moveToPoint(60, -42, 1000);
 
     chassis.moveToPoint(60, -59, 1000);
@@ -339,7 +339,8 @@ void opcontrol() {
         update_intake();
         update_slapper();
         update_lift();
-        wings.driver_update();
+        leftWing.driver_update();
+        rightWing.driver_update();
         rachet_p.driver_update();
 
         // get joystick positions

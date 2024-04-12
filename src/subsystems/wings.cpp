@@ -1,6 +1,6 @@
 #include "main.h"
 #include "subsystems/pneumatics.hpp"
 
-pneumaticSys leftWing(WINGS_ADI, WINGS_ACTUATE_O, WINGS_ACTUATE_I);
-pneumaticSys rightWing(WINGS_ADI, WINGS_ACTUATE_O, WINGS_ACTUATE_I);
+pneumaticSys leftWing(LEFT_WING, BUTTONG_LEFT_WING);
+pneumaticSys rightWing(RIGHT_WING, BUTTON_RIGHT_WING);
 
