@@ -1,6 +1,7 @@
 #include "main.h"
 #include "lemlib/api.hpp"
 #include "subsystems/slapper.hpp"
+#include "autoSelect/selection.h"
 
 // drive motors
 pros::Motor leftFront(LEFT_FRONT, pros::E_MOTOR_GEARSET_06);
@@ -166,6 +167,9 @@ void initialize() {
 
     //Motor inits
     liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+    selector::init();
+
 }
 
 
@@ -329,8 +333,33 @@ void six_ball() {
 #endif
 }
 
+
+void auton1() {
+    std::cout << "auton 1" << std::endl; // x
+}
+
+void auton2() {
+    std::cout << "auton 2" << std::endl; // x
+}
+
+void auton3() {
+    std::cout << "auton 3" << std::endl; // x
+}
+
 void autonomous() {
-    elims();
+    switch (selector::auton) {
+        case 1:
+            auton1();
+            break;
+        case 2:
+            auton2();
+            break;
+        case 3:
+            auton3();
+            break;
+        default:
+            pros::delay(16000);
+    }
 }
 
 void opcontrol() {
