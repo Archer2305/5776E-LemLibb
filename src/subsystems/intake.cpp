@@ -1,10 +1,10 @@
 #include "main.h"
 #include "subsystems/intake.hpp"
 
-pros::Motor intake(INTAKE1_PORT, pros::E_MOTOR_GEAR_BLUE, false);
-//pros::Motor intakeMotor2(INTAKE2_PORT, pros::E_MOTOR_GEAR_BLUE, true);
+pros::Motor intakeMotor1(INTAKE1_PORT, pros::E_MOTOR_GEAR_BLUE, false);
+pros::Motor intakeMotor2(INTAKE2_PORT, pros::E_MOTOR_GEAR_BLUE, false);
 
-//pros::Motor_Group intake({intakeMotor1, intakeMotor2});
+pros::Motor_Group intake({intakeMotor1, intakeMotor2});
 
 void update_intake() {
     int input_1 = controller.get_digital(BUTTON_INTAKE);

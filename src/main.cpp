@@ -339,8 +339,8 @@ void opcontrol() {
         update_intake();
         update_slapper();
         update_lift();
-        leftWing.driver_update();
-        rightWing.driver_update();
+        leftWing.driver_update_toggle();
+        rightWing.driver_update_toggle();
         rachet_p.driver_update();
 
         // get joystick positions
