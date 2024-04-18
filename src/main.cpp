@@ -15,7 +15,6 @@ pros::Motor rightBack(RIGHT_BACK, pros::E_MOTOR_GEARSET_06);
 pros::MotorGroup leftMotors({leftFront, leftMiddle, leftBack});
 pros::MotorGroup rightMotors({rightFront, rightMiddle, rightBack});
 
-// Inertial Sensor on port 2
 pros::Imu imu(IMU_PORT);
 
 // drivetrain settings
@@ -42,7 +41,7 @@ lemlib::ControllerSettings linearController(6,      // proportional gain (kP)
 // angular motion controller
 lemlib::ControllerSettings angularController(2,     // proportional gain (kP)
                                              0,     // integral gain (kI)
-                                             11,    // derivative gain (kD)
+                                             17,    // derivative gain (kD)
                                              3,     // anti windup
                                              1,     // small error range, in degrees
                                              100,   // small error range timeout, in milliseconds
@@ -86,7 +85,7 @@ void matchLoading(float time){
 }
 
 void skillsRun() {
-    matchLoading(23);
+    //matchLoading(23);
     pros::delay(280);
     chassis.moveToPoint(23, -20, 1000, {.forwards=false});
     chassis.moveToPoint(-6, 6, 1000);
@@ -168,7 +167,7 @@ void initialize() {
     //Motor inits
     liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-    selector::init();
+    //selector::init();
 
 }
 
@@ -195,6 +194,7 @@ void flipout() {
     pros::delay(326);
     liftMotor.move_voltage(0);
 }
+
 void elims() {
     flipout();
     chassis.moveToPoint(0, 42, 1000);
@@ -222,43 +222,22 @@ void elims() {
     chassis.tank(0, 0);
 }
 
-void awp() {
-    flipout();
-    chassis.moveToPoint(0, 16, 1000);           //16
-    chassis.moveToPose(-8, 38, -93, 1000);      //-93
-    //chassis.waitUntilDone();
-    pros::delay(320);
+void tuning() {
+    chassis.moveToPoint(0, 24, 6000);
+    pros::delay(3000);
+    chassis.turnTo(24, 24, 1000);
+}
+
+void safe_awp() {
+    chassis.moveToPose(-8, -18, 45, 1000, {.forwards=false, .maxSpeed=48});
+    chassis.waitUntilDone();
+    rightWing.set_state(1);
+    chassis.moveToPoint(3, -9, 1000);
+    chassis.moveToPose(3, 34, 0, 2000, {.maxSpeed=80});
     intake.move_velocity(-600);
-    pros::delay(640);
-    intake.move_velocity(0);
-
-    chassis.moveToPose(-28, 2, 42, 1600, {.forwards=false});
-    chassis.turnTo(-20, -6, 1000, false);
     chassis.waitUntilDone();
-    chassis.tank(-80, -80);
-    pros::delay(64);
-    chassis.tank(0, 0);
-    leftWing.set_state(1);
-    chassis.turnTo(21, -8, 1000, false);
-    pros::delay(500);
-    leftWing.set_state(0);
-    chassis.turnTo(16, -10, 1000);
-
-    chassis.turnTo(13, -9, 1600);
-    chassis.waitUntilDone();
-    chassis.tank(80, 80);
-    pros::delay(610);
-    chassis.tank(0, 0);
-
-    chassis.turnTo(chassis.getPose().x + 12, chassis.getPose().y, 1600);
-    chassis.waitUntilDone();
-    chassis.tank(80, 80);
-    pros::delay(142);
-    chassis.tank(0, 0);
-
-    intake.move_velocity(-600);
-    pros::delay(1600);
-    intake.move_velocity(0);
+    pros::delay(4000);
+    rightWing.set_state(0);
 }
 
 void six_ball() {
@@ -334,36 +313,28 @@ void six_ball() {
 }
 
 
-void auton1() {
-    std::cout << "auton 1" << std::endl; // x
-}
-
-void auton2() {
-    std::cout << "auton 2" << std::endl; // x
-}
-
-void auton3() {
-    std::cout << "auton 3" << std::endl; // x
-}
-
 void autonomous() {
+    #if 0
     switch (selector::auton) {
         case 1:
-            auton1();
+        case -1:
+            safe_awp();
             break;
         case 2:
-            auton2();
+        case -2:
+            six_ball();
             break;
-        case 3:
-            auton3();
+        case 0:
+            skillsRun();
             break;
         default:
-            pros::delay(16000);
-    }
+    #endif
+            safe_awp();             
+    //}
 }
 
 void opcontrol() {
-    //matchLoading(23.5);
+    //leftWing.set_state(0);
     while (true) {
         update_intake();
         update_slapper();
@@ -374,6 +345,7 @@ void opcontrol() {
 
         // get joystick positions
         int input_brake = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
+
        #if 0
         if (input_brake > 100) {
             leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
@@ -385,11 +357,12 @@ void opcontrol() {
             liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
         }
         #endif  
+
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        // move the chassis with curvature drive
+
         chassis.curvature(abs(leftY) > 16 ? leftY : 0, abs(rightX) > 16 ? rightX : 0);
-        // delay to save resources
+
         pros::delay(10);
     }
 }

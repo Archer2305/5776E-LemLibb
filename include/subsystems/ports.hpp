@@ -25,7 +25,7 @@
 //------------------------
 
 //---------sensors----------
-#define IMU_PORT        0
+#define IMU_PORT        1
 //--------------------------
 
 //---------pneumatics----------
@@ -38,17 +38,12 @@
 #define BUTTON_INTAKE           pros::E_CONTROLLER_DIGITAL_R1
 #define BUTTON_OUTTAKE          pros::E_CONTROLLER_DIGITAL_R2
 
-// #define WINGS_ACTUATE_O         pros::E_CONTROLLER_DIGITAL_B
-// #define WINGS_ACTUATE_I         pros::E_CONTROLLER_DIGITAL_DOWN
-
 #define RACHET_ACT             pros::E_CONTROLLER_DIGITAL_L1
 #define RACHET_DEACT           pros::E_CONTROLLER_DIGITAL_L2
 
 #define BUTTON_SLAPPER         pros::E_CONTROLLER_DIGITAL_A
 #define BUTTON_RIGHT_WING      pros::E_CONTROLLER_DIGITAL_B
 #define BUTTONG_LEFT_WING      pros::E_CONTROLLER_DIGITAL_DOWN
-//#define RACHET_ACT              
-//#define RACHET_DEACT
 //---------------------------------------------------------------
 
 #endif
