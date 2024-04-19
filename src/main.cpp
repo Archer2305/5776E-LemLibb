@@ -227,7 +227,11 @@ void tuning() {
     pros::delay(3000);
     chassis.turnTo(24, 24, 1000);
 }
+void close_awp() { //392x copy 
+    chassis.moveToPose((17), -5.18, -45, 2000);
+    chassis.waitUntilDone();
 
+}
 void safe_awp() {
     chassis.moveToPose(-8, -18, 45, 1000, {.forwards=false, .maxSpeed=48});
     chassis.waitUntilDone();
@@ -329,7 +333,7 @@ void autonomous() {
             break;
         default:
     #endif
-            safe_awp();             
+            close_awp();            
     //}
 }
 
