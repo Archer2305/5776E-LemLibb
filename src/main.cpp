@@ -1,5 +1,7 @@
 #include "main.h"
 #include "lemlib/api.hpp"
+#include "pros/rtos.h"
+#include "pros/rtos.hpp"
 #include "subsystems/slapper.hpp"
 #include "autoSelect/selection.h"
 
@@ -154,6 +156,8 @@ void initialize() {
         while (true) {
             pros::lcd::print(0, "x: %lf", chassis.getPose().x); // x
             pros::lcd::print(1, "y: %lf", chassis.getPose().y); // y
+            pros::lcd::print(2, "A: %lf", chassis.getPose().theta); // y
+
             //pros::lcd::print(2, "LB: %lf", leftBack.get_power()); // heading
 
             //pros::lcd::print(3, "RF: %f", rightFront.get_power()); // x
@@ -227,10 +231,22 @@ void tuning() {
     pros::delay(3000);
     chassis.turnTo(24, 24, 1000);
 }
-void close_awp() { //392x copy 
-    chassis.moveToPose((17), -5.18, -45, 2000);
-    chassis.waitUntilDone();
+void rush() { 
+     leftMotors.move_velocity(-600); //get away from barrier 
+     rightMotors.move_velocity(-600);
+     pros::delay(300);
+     chassis.moveToPose(2, -26, -45, 2000);
+     chassis.waitUntilDone();
+     rightWing.set_state(1); //turn the wing on
+     chassis.waitUntilDone();
 
+     leftMotors.move_velocity(600);//spin to hit the triball
+     rightMotors.move_velocity(-600);
+     pros::delay(800);
+     leftMotors.move_velocity(0);
+     rightMotors.move_velocity(0);
+
+    
 }
 void safe_awp() {
     chassis.moveToPose(-8, -18, 45, 1000, {.forwards=false, .maxSpeed=48});
@@ -333,7 +349,7 @@ void autonomous() {
             break;
         default:
     #endif
-            close_awp();            
+            rush();            
     //}
 }
 
