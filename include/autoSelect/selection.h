@@ -5,7 +5,7 @@
 //selector configuration
 #define HUE 360
 #define DEFAULT 1
-#define AUTONS "far side", "near side", "Do Nothing"
+#define AUTONS "rush", "safe" 
 
 namespace selector{
 

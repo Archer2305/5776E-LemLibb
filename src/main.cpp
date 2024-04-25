@@ -171,7 +171,7 @@ void initialize() {
     //Motor inits
     liftMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-    //selector::init();
+    selector::init();
 
 }
 
@@ -231,24 +231,73 @@ void tuning() {
     pros::delay(3000);
     chassis.turnTo(24, 24, 1000);
 }
-void rush() { 
-     leftMotors.move_velocity(-600); //get away from barrier 
-     rightMotors.move_velocity(-600);
-     pros::delay(300);
-     chassis.moveToPose(2, -26, -45, 2000);
-     chassis.waitUntilDone();
-     rightWing.set_state(1); //turn the wing on
-     chassis.waitUntilDone();
 
-     leftMotors.move_velocity(600);//spin to hit the triball
-     rightMotors.move_velocity(-600);
-     pros::delay(800);
-     leftMotors.move_velocity(0);
-     rightMotors.move_velocity(0);
+
+void rush_6() {         //16
+    chassis.moveToPoint(0, -53, 2000, {.forwards=false});
+    chassis.waitUntil(30);
+   //leftWing.set_state(1);
+    chassis.cancelMotion();
+                            //42
+    chassis.moveToPoint(20, -55, 2000, {.maxSpeed=77});
+    intake.move_velocity(600);
+    //chassis.waitUntil(10);      //tune
+    rightWing.set_state(1);
+    chassis.cancelMotion();
+
+    chassis.moveToPose(20, -36, 99, 2000, {.maxSpeed=88});  //point
+    chassis.waitUntilDone();
+    //chassis.tank(0, 0);
+    intake.move_velocity(0);
+
+    chassis.moveToPoint(chassis.getPose().x + 8, chassis.getPose().y + 8, 1000, {.forwards=false, .maxSpeed=100});
+    rightWing.set_state(0);
+
+    chassis.turnTo(-10000, -42, 1000, true, 100);
+    chassis.moveToPoint(-28, -40, 1000, {.maxSpeed=100});
+    intake.move_velocity(-600);
+    leftWing.set_state(1);
+    rightWing.set_state(1);
+    chassis.waitUntilDone();
+    leftWing.set_state(0);
+    rightWing.set_state(0);
+    chassis.tank(80, 80);
+    pros::delay(320);
+    chassis.tank(-80, -80);
+    pros::delay(320);
+    chassis.tank(0, 0);
+    intake.move_velocity(0);
+
+    //chassis.moveToPoint(chassis.getPose().x + 10, chassis.getPose().y, 1000, {.forwards=false});
+    chassis.moveToPoint(23, -12, 1000, {.maxSpeed=88});
+    intake.move_velocity(480);
+    chassis.waitUntilDone();
+    pros::delay(480);
+    intake.move_velocity(0);
+
+    //chassis.moveToPoint(chassis.getPose().x - 6, chassis.getPose().y - 6, 1000, {.forwards=false});
+    chassis.moveToPose(-42, -38, -120, 2000);
+    pros::delay(800);
+    leftWing.set_state(1);
+    pros::delay(320);
+    intake.move_velocity(-600);
+    chassis.waitUntilDone();
+    chassis.tank(-23, -23);
+    intake.move_velocity(0);
+    leftWing.set_state(0);
+    pros::delay(1600);
+    chassis.tank(0, 0);
+    
 
     
 }
+    
+
 void safe_awp() {
+    intake.move_velocity(-600);
+    pros::delay(800);
+    intake.move_velocity(0);
+
     chassis.moveToPose(-8, -18, 45, 1000, {.forwards=false, .maxSpeed=48});
     chassis.waitUntilDone();
     rightWing.set_state(1);
@@ -256,101 +305,71 @@ void safe_awp() {
     chassis.moveToPose(3, 34, 0, 2000, {.maxSpeed=80});
     intake.move_velocity(-600);
     chassis.waitUntilDone();
-    pros::delay(4000);
+    pros::delay(2000);
     rightWing.set_state(0);
+    leftWing.set_state(1);
+    pros::delay(280);
+    chassis.tank(16, 0);
+    pros::delay(480);
+    chassis.tank(0, 0);
+     
 }
 
 void six_ball() {
-    flipout();
-
-    intake.move_velocity(600);
-    chassis.moveToPoint(0, 4, 1000, {.maxSpeed = 16});
-    pros::delay(420);
-    intake.move_velocity(0);
-
-    chassis.moveToPoint(0, -30, 2000, {.forwards = false, .maxSpeed=88});
-    chassis.moveToPose(42, -58, -84, 500, {.forwards = false, .maxSpeed=100}, true); //|
-    pros::delay(170);
-    //chassis.waitUntil(8);                                                             //|
-    leftWing.set_state(1);
-    //chassis.waitUntil(16);
-    pros::delay(590);
-    leftWing.set_state(0);
-    chassis.waitUntilDone();
-    pros::delay(80);
-
-    chassis.moveToPoint(37, -55, 2000, {.forwards=false});
-    chassis.tank(64, 64);
-    pros::delay(100);
-    chassis.tank(0, 0);
-
-    chassis.moveToPose(32, -55, 95, 1000, {.maxSpeed = 64});
-    chassis.waitUntilDone();
+    //flipout
     intake.move_velocity(-600);
-    pros::delay(250);
-    chassis.tank(88, 88);
-    pros::delay(380);
-    chassis.tank(-80, -80);
-    pros::delay(400);
-    chassis.tank(0, 0);
-    intake.move_velocity(0);
-
-//get first barrier tb
-    chassis.moveToPoint(51, 0, 1000, {.maxSpeed=95});
-    intake.move_velocity(600);
-    chassis.waitUntilDone();
     pros::delay(800);
     intake.move_velocity(0);
-    chassis.moveToPoint(63, -59, 1000); //score
-    pros::delay(320);
-    intake.move_velocity(-600);
-    chassis.waitUntilDone();
-    intake.move_velocity(0);
-#if 0
-    //second triball
-    chassis.moveToPose(55, 12, 80, 1000);
-    chassis.moveToPose(60, 0, 80, 1000);
+
     intake.move_velocity(600);
+    chassis.moveToPoint(0, 6, 1000);
     chassis.waitUntilDone();
+    pros::delay(200);
     intake.move_velocity(0);
 
-    chassis.moveToPoint(60, -59, 1000, {.forwards=false});
-    leftWing.set_state(1);
-    chassis.waitUntilDone();
-    leftWing.set_state(0);
-    chassis.moveToPoint(60, -42, 1000);
+    chassis.moveToPoint(23, -42, 1000, {.forwards=false});
+    chassis.moveToPoint(36, -45, 1000, {.forwards=false});
+    chassis.moveToPoint(16, -36, 1000);
 
-    chassis.moveToPoint(60, -59, 1000);
-    pros::delay(280);
-    intake.move_velocity(-600);
+    chassis.moveToPose(14, -42, 32, 1000);
     chassis.waitUntilDone();
+    leftWing.set_state(1);
+    //chassis.moveToPoint(
+
+    chassis.turnToAngle(-100, 1000);
+    pros::delay(200);
+    leftWing.set_state(0);
+    chassis.turnToAngle(90, 1000);
+    chassis.waitUntilDone();
+
+    intake.move_velocity(-600);
+    chassis.moveToPoint(36, -45, 1000);
+    chassis.waitUntilDone();
+    chassis.moveToPoint(28, -45, 1000); //backup    
+
     intake.move_velocity(0);
     
-    chassis.tank(-80, -80);
-    pros::delay(280);
-    chassis.tank(0, 0);
-#endif
+    
+    
 }
 
 
 void autonomous() {
-    #if 0
     switch (selector::auton) {
-        case 1:
-        case -1:
+        case 1:     //far   safe
+        case -1:    //close safe
+            printf("awp\n");
             safe_awp();
             break;
-        case 2:
-        case -2:
-            six_ball();
-            break;
-        case 0:
-            skillsRun();
+        case 2:     //far dis
+        case -2:    //close dis
+            printf("sb/r6\n");
+            rush_6();
+            //six_ball();
             break;
         default:
-    #endif
-            rush();            
-    //}
+            pros::delay(10000);            
+    }
 }
 
 void opcontrol() {
